@@ -1,5 +1,5 @@
 angular.module('beamng.apps')
-.directive('myApps', ['StreamsManager', function (StreamsManager) {
+.directive('myApps', [function () {
   return {
 	templateUrl: '/ui/modules/apps/Video/app.html',
     replace: true,

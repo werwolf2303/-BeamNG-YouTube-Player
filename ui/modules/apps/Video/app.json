@@ -1,7 +1,7 @@
 {
   "name" : "YouTube Player",
   "author": "Giani Beil",
-  "version": "1.5",
+  "version": "2.4",
   "description": "A YouTube Player",
   "directive": "myApp",
   "domElement": "<my-apps></my-apps>",

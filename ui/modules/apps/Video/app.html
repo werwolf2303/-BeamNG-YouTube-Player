@@ -9,6 +9,8 @@
 <button ng-click="clear()" style="left:1px;color:red">x</button>
 <button id="lang1" style="display:inline;left:3" ng-click="play()">Play</button>
 <button ng-click="sample()">Play example</button>
+<input type="checkbox" ng-model="checksel" ng-change="setLoop()"><a style="color:white">Loop Video</a></input>
+<a style="color:red" id="error"></a>
 <div class="video-container">
 <iframe sandbox="allow-scripts allow-same-origin" oncontextmenu="console.log('Try to open url')" onload="console.log(this.src)" ng-click="error()" id="video" style="height:100%" frameBorder="0" width="95%" height="100%" src="/ui/modules/apps/Video/luft.html" allow="fullscreen"></iframe>
 </div>

@@ -92,7 +92,7 @@ angular.module('beamng.apps')
 							}
 							}
 						}
-						if(viewid.includes("_")) {
+						if(viewid.startsWith("_")) {
 						if(loop) {
 						var errord = document.getElementById("error");
                         errord.textContent = "Err 01x2";

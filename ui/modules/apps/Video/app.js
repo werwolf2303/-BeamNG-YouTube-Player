@@ -10,11 +10,16 @@ angular.module('beamng.apps')
                 // 
                 //  Err 01x2 = Unable to loop 
 				// --------------------------------------------------
-				var debug = true;
+				var debug = false;
 				var loop = false;
 				var errloop = false;
+				var triggercheck = false;
+				var hideytlogo = false;
+				var enablejs = false;
+				var playercolor = "red";
+
 				scope.english = function() {
-					document.getElementById("video").src="/ui/modules/apps/Video/404e.html";
+					document.getElementById("video").src="/ui/modules/apps/Video/luft.html";
 					document.getElementById("lang1").textContent="Play";
 					document.getElementById("auswahl").setAttribute("style", "display:none");
 					document.getElementById("todisplay").setAttribute("style", "");
@@ -30,21 +35,44 @@ angular.module('beamng.apps')
 				scope.setLoop = function() {
 					loop = scope.checksel;
 				}
+				scope.setHideYTLogo = function() {
+					hideytlogo = scope.hideyt;
+				}
+				scope.setEnableJS = function() {
+					enablejs = scope.enjs;
+				}
+				scope.setColor = function() {
+					playercolor = scope.col;
+				}
 				scope.sample = function() {
 					var src = document.getElementById("video").src;
+					var args = "";
+					if(args=="") {
+						if(hideytlogo) {
+							args = args + "&modestbranding=1";
+						}else{
+							args = args + "&modestbranding=0";
+						}
+						if(enablejs) {
+							args = args + "&enablejsapi=1";
+						}else{
+							args = args + "&enablejsapi=0";
+						}
+						args = args + "&color=" + playercolor;
+					}
 					if(debug) {
 					console.log(src);
 					}
+					document.getElementById("url").value="Katyusha (Катюша) Hardbass";
 					if(loop) {
-					document.getElementById("video").src="https://www.youtube.com/embed/mR8FsJi-8cs?&autoplay=1&loop=1";
+					document.getElementById("video").src="https://www.youtube-nocookie.com/embed/wd_sjd6zKsQ?&autoplay=1&loop=1" + args;
 					}else{
 					//if(src=="local://local/ui/modules/apps/Video/luft.html") {
-					document.getElementById("video").src="https://www.youtube.com/embed/mR8FsJi-8cs?&autoplay=1";
+					document.getElementById("video").src="https://www.youtube-nocookie.com/embed/wd_sjd6zKsQ?&autoplay=1" + args;
 					//}
 					}
 				}
 				scope.keyhand = function(key) {
-					console.log(key.keyCode);
 					if(key.keyCode=="13") {
 						scope.play();
 						if(debug) {
@@ -55,6 +83,40 @@ angular.module('beamng.apps')
 				scope.hello = function () {
 
 				};
+				scope.openSettings = function() {
+					var settings = document.getElementById("settings");
+					var content = document.getElementById("control");
+					var setdebu = document.getElementById("debu");
+					var ejs = document.getElementById("ejs");
+					var hytl = document.getElementById("hytl");
+					scope.col = playercolor;
+					if(hideytlogo) {
+						hytl.checked = 1;
+					}else{
+						hytl.checked = 0;
+					}
+					if(enablejs) {
+						ejs.checked = 1;
+					}else{
+						ejs.checked = 0;
+					}
+					if(debug) {
+						setdebu.checked = 1;
+					}else{
+						setdebu.checked = 0;
+					}
+					content.setAttribute("style", "display:none");
+					settings.setAttribute("style", "");
+				}
+				scope.closeSettings = function() {
+					var settings = document.getElementById("settings");
+					var content = document.getElementById("control");
+					content.setAttribute("style", "");
+					settings.setAttribute("style", "display:none");
+				}
+				scope.setDebug = function() {
+					debug = scope.deb;
+				}
 				scope.style0 = function() {
 					document.getElementById("lang1").setAttribute("id", "lang0");
 				}
@@ -68,10 +130,24 @@ angular.module('beamng.apps')
 					document.getElementById("lang1").setAttribute("id", "lang1");
 				}
 				scope.play = function () {
+					var args = "";
 					var video = document.getElementById("video");
 					var url1 = document.getElementById("url").value;
-					var url = url1.replace("watch?v=", "embed/").replace("www.youtube.com", "www.youtube.com").replace("&ab_channel=", "?&1").replace("&t=", "?2").replace("&?", "?");
+					var url = url1.replace("watch?v=", "embed/").replace("www.youtube.com", "www.youtube.com").replace("&ab_channel=", "?&1=").replace("&t=", "?2").replace("&?", "?");
 					var viewid = url1.replace("watch?v=", "").replace("www.youtube.com", "www.youtube.com").replace("&ab_channel=", "?&1").replace("&t=", "?2").replace("&?", "?");
+					if(args=="") {
+						if(hideytlogo) {
+							args = args + "&modestbranding=1";
+						}else{
+							args = args + "&modestbranding=0";
+						}
+						if(enablejs) {
+							args = args + "&enablejsapi=1";
+						}else{
+							args = args + "&enablejsapi=0";
+						}
+						args = args + "&color=" + playercolor;
+					}
 					if(!url1==""){
 						if(debug) {
 							console.log("Try to load video: " + url);
@@ -83,6 +159,7 @@ angular.module('beamng.apps')
 							}
 							fin = viewid.split("?&1");
 							viewid=fin[0].replace("https://www.youtube.com/", "");
+							url1
 							if(debug) {
 							console.log("[VIEWID] Is now " + viewid);	
 							}
@@ -95,7 +172,9 @@ angular.module('beamng.apps')
 						if(viewid.startsWith("_")) {
 						if(loop) {
 						var errord = document.getElementById("error");
+						document.getElementById("settingsbutton").setAttribute("style","display:none");
                         errord.textContent = "Err 01x2";
+						triggercheck = true;
                         viewid = "";	
                         errloop=true;	
 						}						
@@ -104,12 +183,15 @@ angular.module('beamng.apps')
 						if(debug) {
 							console.log("Roh playlist erkannt");
                         }	
-                        var toload = url.replace("==", "=").replace("https://www.youtube.com/playlist?", "https://www.youtube.com/embed/?listType=playlist&");
+						var urlv = url1.replace("watch?v=", "embed/").replace("www.youtube.com", "www.youtube.com").replace("&ab_channel=", "&1=").replace("&t=", "?2").replace("&?", "?");
+                        var toload = urlv.replace("==", "=").replace("https://www.youtube.com/playlist?", "https://www.youtube.com/embed/?listType=playlist&");
 						video.src=toload;
 						if(loop) {
+							triggercheck = true;
+							document.getElementById("settingsbutton").setAttribute("style","display:none");
 							document.getElementById("error").textContent="Not Available";	
 						}
-                        return;						
+                        //return;						
 						}
 						if(url1.includes("youtu.be")) {
 							if(debug) {
@@ -121,12 +203,12 @@ angular.module('beamng.apps')
 							console.log(viewid);	
 							}
 							if(errloop) {
-							video.src=url + "?&autoplay=1";
+							video.src=url + "?&autoplay=1" + args;
 						    }else{
 							if(loop) {
-							video.src=url + "?&autoplay=1&loop=1&playlist=" + viewid;
+							video.src=url + "?&autoplay=1&loop=1&playlist=" + viewid + args;
 							}else{
-							video.src=url + "?&autoplay=1";
+							video.src=url + "?&autoplay=1" + args;
 							}
 							}
 						}
@@ -142,7 +224,7 @@ angular.module('beamng.apps')
 							if(loop) {
 							document.getElementById("error").textContent="Not Available";	
 							}
-							video.src="https://www.youtube.com/embed/?&listType=playlist&list" + psplit[1];
+							video.src="https://www.youtube.com/embed/?&listType=playlist&list" + psplit[1].replace("?&1", "&1") + args + "&autoplay=1";
 						}else{
 							if(url.includes("youtube")) {
 								if(debug) {
@@ -155,12 +237,12 @@ angular.module('beamng.apps')
 									url = url1.replace("https://youtu.be/", "https://www.youtube.com/embed/");
 									viewid = viewid.replace("https://www.youtube.com/embed/", "").replace("https://www.youtube.com/", "");
 									if(errloop) {
-									video.src=url + "?&autoplay=1";
+									video.src=url + "?&autoplay=1" + args;
 									}else{
 									if(loop) {
-									video.src=url + "?&autoplay=1&loop=1&playlist=" + viewid;
+									video.src=url + "?&autoplay=1&loop=1&playlist=" + viewid + args;
 									}else{
-									video.src=url + "?&autoplay=1";
+									video.src=url + "?&autoplay=1" + args;
 									}
 									}
 									//return;
@@ -169,12 +251,12 @@ angular.module('beamng.apps')
 									url = url + "";
 									viewid = viewid.replace("https://www.youtube.com/embed/", "");
 									if(errloop) {
-									video.src=url + "&autoplay=1";	
+									video.src=url + "&autoplay=1" + args;	
 									}else{
 									if(loop) {
-									video.src=url + "&autoplay=1&loop=1&playlist=" + viewid;
+									video.src=url + "&autoplay=1&loop=1&playlist=" + viewid + args;
 									}else{
-									video.src=url + "&autoplay=1";
+									video.src=url + "&autoplay=1" + args;
 									}
 									}
 									//return;
@@ -184,12 +266,12 @@ angular.module('beamng.apps')
 										fin = viewid.split("?&1");
 							            viewid=fin[0].replace("https://www.youtube.com/", "");
 										if(errloop) {
-										url = url + "&autoplay=1";	
+										url = url + "&autoplay=1" + args;	
 										}else{
 										if(loop) {
-										url = url + "&autoplay=1&loop=1&playlist=" + viewid;	
+										url = url + "&autoplay=1&loop=1&playlist=" + viewid + args;	
 										}else{
-										url = url + "&autoplay=1";
+										url = url + "&autoplay=1" + args;
 										}
 										}
 										video.src=url;
@@ -198,12 +280,12 @@ angular.module('beamng.apps')
 									}else{
 										viewid = viewid.replace("https://www.youtube.com/embed/", "");
 										if(errloop) {
-										url = url + "?&autoplay=1";	
+										url = url + "?&autoplay=1" + args;	
 										}else{
 										if(loop) {
-										url = url + "?&autoplay=1&loop=1&playlist=" + viewid;
+										url = url + "?&autoplay=1&loop=1&playlist=" + viewid + args;
 										}else{
-										url = url + "?&autoplay=1";
+										url = url + "?&autoplay=1" + args;
 										}
 										}
 										video.src=url;
@@ -241,8 +323,21 @@ angular.module('beamng.apps')
 					}
 					tick = tick + 1;	
 				});
+				var ticks = 0;
 				scope.TickEvent = function() {
-					
+					if(triggercheck) {
+						if(ticks==5) {
+							var check = document.getElementById("loopcheck");
+							var errormessages = document.getElementById("error");
+							var settingsbutton = document.getElementById("settingsbutton");
+							check.checked=0;
+							settingsbutton.setAttribute("style", "");
+							errormessages.textContent = "";
+							ticks=0;
+							triggercheck=false;
+						}
+						ticks = ticks + 1;
+					}
 				}
 				scope.down = function() {
 

@@ -63,12 +63,12 @@ angular.module('beamng.apps')
 					if(debug) {
 					console.log(src);
 					}
-					document.getElementById("url").value="Katyusha (Катюша) Hardbass";
+					document.getElementById("url").value="Raportagen - Vogelperspektive (Official Video)";
 					if(loop) {
-					document.getElementById("video").src="https://www.youtube-nocookie.com/embed/wd_sjd6zKsQ?&autoplay=1&loop=1" + args;
+					document.getElementById("video").src="https://www.youtube-nocookie.com/embed/kBymX2pIINM?&autoplay=1&loop=1" + args;
 					}else{
 					//if(src=="local://local/ui/modules/apps/Video/luft.html") {
-					document.getElementById("video").src="https://www.youtube-nocookie.com/embed/wd_sjd6zKsQ?&autoplay=1" + args;
+					document.getElementById("video").src="https://www.youtube-nocookie.com/embed/kBymX2pIINM?&autoplay=1" + args;
 					//}
 					}
 				}

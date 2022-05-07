@@ -185,13 +185,24 @@ angular.module('beamng.apps')
                         }	
 						var urlv = url1.replace("watch?v=", "embed/").replace("www.youtube.com", "www.youtube.com").replace("&ab_channel=", "&1=").replace("&t=", "?2").replace("&?", "?");
                         var toload = urlv.replace("==", "=").replace("https://www.youtube.com/playlist?", "https://www.youtube.com/embed/?listType=playlist&");
+						if(debug) {
+							console.log("toload is: " + toload);
+						}
+						if(toload.includes("https://www.youtube.com/playlist?list")) {
+							if(debug) {
+								console.log("Bug detection triggered: Fix playlist url");
+							}
+							var fix = toload.replace("https://www.youtube.com/playlist?list=", "https://www.youtube.com/embed/?listType=playlist&list=");
+							video.src=fix;
+							return;
+						}else{
 						video.src=toload;
+						}
 						if(loop) {
 							triggercheck = true;
 							document.getElementById("settingsbutton").setAttribute("style","display:none");
 							document.getElementById("error").textContent="Not Available";	
-						}
-                        //return;						
+						}					
 						}
 						if(url1.includes("youtu.be")) {
 							if(debug) {

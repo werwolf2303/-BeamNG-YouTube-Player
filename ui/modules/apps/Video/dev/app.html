@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            YouTube Player - Debug
+        </title>
+        <script src="app.js"></script>
+    </head>
+    <body>
+        <div onclick="urlshow()">
+            <div id="todisplay">
+            <div id="control">
+            <button id="hideshow" onclick="hides()">Hide</button>
+            <a id="cval" style="display:none">false</a>
+            <div id="controls" style="display:inline">
+            <input onkeypress="return keyhand(event)" onmousedown="document.getElementById('url').value=''" class="form-control form-control-sm" id="url" type="text" style="width:73%" class="form-control" placeholder="Youtube URL" aria-label="Username" aria-describedby="basic-addon1">
+            <button onclick="down" style="display:none" id="down">Down</button>
+            <button onclick="clear()" style="left:1px;color:red">x</button>
+            <button id="lang1" style="display:inline;left:3" onclick="play()">Play</button>
+            <button onclick="sample()">Play example</button>
+            <button id="settingsbutton" onclick="openSettings()">Settings</button>
+            <input type="checkbox" id="loopcheck" onchange="setLoop(this)"><a style="color:white">Loop Video</a></input>
+            <a style="color:red" id="error"></a>
+            <div class="video-container">
+            <iframe sandbox="allow-scripts allow-same-origin" onclick="error()" id="video" style="height:100%" frameBorder="0" width="95%" height="100%" src="../luft.html" allow="fullscreen"></iframe>
+            </div>
+            </div>
+            </div>
+            <div id="settings" style="display:none">
+                <a style="display:inline">Debug </a><input style="display:inline" id="debu" onchange="setDebug(this)" type="checkbox">
+                <br>
+                <label for="options">Seekbar Color </label>
+                <select onchange="setColor(this)" name="options" id="options">
+                    <option value="red">Red</option>
+                    <option value="white">White</option>
+                </select>
+                <br>
+                <a>Enable JavaScript </a><input style="display:inline" id="ejs" onchange="setEnableJS(this)" type="checkbox">
+                <br>
+                <a>Hide YouTube Logo </a><input style="display:inline" id="hytl" onchange="setHideYTLogo(this)" type="checkbox">
+                <br>
+                <a style="color:red">!!Press play to apply settings!!</a>
+                <br>
+                <button onclick="closeSettings()">Close</button>
+            </div>
+            <style>
+            .hideshow {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 */
+                height: 0;
+            }
+            .video-container {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 */
+                height: 0;
+            }
+            .video-container iframe {
+                position: absolute;
+                top: 1;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            #settings {
+                overflow:scroll;
+            }
+            </style>
+            </div>
+            </div>
+    </body>
+</html>

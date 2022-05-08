@@ -1,15 +1,10 @@
-angular.module('beamng.apps')
-.directive('youtubePlayer', [function () {
-    return {
-        //Here is templateurl but only template works for some reason
-        replace: true, //Not sure 
-        restrict: 'EA', //Not sure
-        link: function (scope, element, attrs) {
-                
-                // --------------------------------------------------
+console.log("INFO \n\nThis is only for debugging");
+console.log("Init success : Loaded app.js")
+// --------------------------------------------------
 				// Error Codes for Player:
                 // 
                 //  Err 01x2 = Unable to loop 
+                //  Err 02x4 = Invalid URL
 				// --------------------------------------------------
 				
                 var debug = false; //Is debug enabled
@@ -20,26 +15,26 @@ angular.module('beamng.apps')
 				var enablejs = false; //Is javascript enabled
 				var playercolor = "red"; //Which color is the seekbar
 
-				//Sets the values that the player selected
-                scope.setLoop = function() {
-					loop = scope.checksel;
+                //Sets the values that the player selected
+                function setLoop(value) {
+					loop = value.checked;
 				}
-				scope.setHideYTLogo = function() {
-					hideytlogo = scope.hideyt;
+				function setHideYTLogo(value) {
+					hideytlogo = value.checked;
 				}
-				scope.setEnableJS = function() {
-					enablejs = scope.enjs;
+				function setEnableJS(value) {
+					enablejs = value.checked;
 				}
-				scope.setColor = function() {
-					playercolor = scope.col;
+				function setColor(value) {
+					playercolor = value.value;
 				}
-                scope.setDebug = function() {
-					debug = scope.deb;
+                function setDebug(value) {
+					debug = value.checked;
 				}
                 // --------------END---------------------
                 
                 //For example video
-				scope.sample = function() {
+				function sample() {
 					var src = document.getElementById("video").src;
 					var args = "";
 					if(args=="") {
@@ -68,9 +63,9 @@ angular.module('beamng.apps')
                 // --------------END---------------------
 
                 //For key presses -- DEPRECEATED --
-				scope.keyhand = function(key) {
+				function keyhand(key) {
 					if(key.keyCode=="13") {
-						scope.play();
+						play();
 						if(debug) {
 							console.log("Enter");
 						}
@@ -79,13 +74,13 @@ angular.module('beamng.apps')
                 // --------------END---------------------
 
                 //For open the settings
-				scope.openSettings = function() {
+				function openSettings() {
 					var settings = document.getElementById("settings");
 					var content = document.getElementById("control");
 					var setdebu = document.getElementById("debu");
 					var ejs = document.getElementById("ejs");
 					var hytl = document.getElementById("hytl");
-					scope.col = playercolor;
+					col = playercolor;
 					if(hideytlogo) {
 						hytl.checked = 1;
 					}else{
@@ -107,7 +102,7 @@ angular.module('beamng.apps')
                 // --------------END---------------------
 
                 // For closing the settings
-				scope.closeSettings = function() {
+				function closeSettings() {
 					var settings = document.getElementById("settings");
 					var content = document.getElementById("control");
 					content.setAttribute("style", "");
@@ -116,22 +111,82 @@ angular.module('beamng.apps')
                 // --------------END---------------------
 
                 //For clearing the url input field
-				scope.clear = function() {
+				function clear() {
 					document.getElementById("url").value="";
-					document.getElementById("video").src="/ui/modules/apps/Video/luft.html";
+					document.getElementById("video").src="../luft.html";
 					var err = document.getElementById("error");
 					err.textContent="";
 				}
                 // --------------END---------------------
 
                 //For playing the videos
-				scope.play = function () {
-                    //Here comes to code for playing the videos
-                }
+				function play() {
+                    //Here comes the code for playing the videos
+                    var url = document.getElementById("url").value;
+					var newurl = "";
+					var video = document.getElementById("video");
+                    var args = "";
+                    if(args=="") {
+						if(hideytlogo) {
+							args = args + "&modestbranding=1";
+						}else{
+							args = args + "&modestbranding=0";
+						}
+						if(enablejs) {
+							args = args + "&enablejsapi=1";
+						}else{
+							args = args + "&enablejsapi=0";
+						}
+						args = args + "&color=" + playercolor;
+					}
+                    if(url.includes("you")&&url.includes("https://")) {
+                        if(url.includes("&")) {
+                            if(debug) {
+                                console.log("Detected player arguments");
+                            }
+                            url = url.split("&")[0];
+                        }
+                        if(debug) {
+                        console.log("Debug is: " + debug + " | Loop is: " + loop  + " | HideYTLogo is: " + hideytlogo + " | " + "EnableJS is: " + enablejs + " | SeekBarColor is: " + playercolor);
+                        console.log(url);
+                        }
+						if(url.includes("/playlist")) {
+                            if(debug) {
+                                console.log("Playlist detected");
+                            }
+                            newurl = url.replace("https://www.youtube.com/playlist?list=", "https://www.youtube.com/embed/videoseries?list=");
+                            video.src=newurl;
+						}else{
+							if(url.includes("youtu.be")) {
+								if(debug) {
+									console.log("Load mobile youtube video");
+								}
+								newurl = url.replace("https://youtu.be/", "https://youtube.com/embed/")
+							    video.src=newurl + "?" + args;
+                            }else{
+                                if(url.includes("youtube.com")) {
+                                    if(debug) {
+                                        console.log("Detected normal youtube link");
+                                    }
+                                    newurl = url.replace("https://www.youtube.com/watch?v=", "https://youtube.com/embed/");
+                                    video.src=newurl + "?" + args;
+                                }
+                            }
+						}
+                        if(debug) {
+                        console.log(newurl);
+                        }
+					}else{
+                        var errord = document.getElementById("error");
+						document.getElementById("settingsbutton").setAttribute("style","display:none");
+                        errord.textContent = "Err 02x4";
+						triggercheck = true;
+                    }
+				}
                 // --------------END---------------------
 
                 //For hiding the ui
-                scope.hides = function() {
+                function hides() {
 					var cval = document.getElementById("cval").textContent;
 					//Visible
 					if(cval=="false") {
@@ -149,24 +204,16 @@ angular.module('beamng.apps')
                 // --------------END---------------------
 
                 //Not sure if used or not
-				scope.urlshow = function() {
+				function urlshow() {
 					var url = document.getElementById("url");
 					url.setAttribute("placeholder", "");
 				}
                 // --------------END---------------------
 
                 //For checking errors
-				var tick = 0;
-				scope.$on('streamsUpdate', function (event, streams) {
-					if(tick==20) {
-						scope.TickEvent();
-                        tick = 0;						
-					}
-					tick = tick + 1;	
-				});
 				var ticks = 0;
-				scope.TickEvent = function() {
-					if(triggercheck) {
+                function everySecond() {
+                    if(triggercheck) {
 						if(ticks==5) {
 							var check = document.getElementById("loopcheck");
 							var errormessages = document.getElementById("error");
@@ -179,8 +226,6 @@ angular.module('beamng.apps')
 						}
 						ticks = ticks + 1;
 					}
-				}
+                }
+                setInterval(everySecond, 1000);
                 // --------------END---------------------
-			}
-		};
-	}])

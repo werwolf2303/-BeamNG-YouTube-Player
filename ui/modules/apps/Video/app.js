@@ -9,6 +9,7 @@ angular.module('beamng.apps')
 				// Error Codes for Player:
                 // 
                 //  Err 01x2 = Unable to loop 
+				//  Err 02x4 = Invalid URL
 				// --------------------------------------------------
 				var debug = false;
 				var loop = false;

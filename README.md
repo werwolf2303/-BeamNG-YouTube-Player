@@ -1,4 +1,6 @@
-# -BeamNG-YouTube-Player
+# -BeamNG-YouTube-Player EOL
+
+For EOL informations go to the BeamNG Repo
 
 <br>
 <a>This is the source code of the YouTube Player for BeamNG.drive</a>

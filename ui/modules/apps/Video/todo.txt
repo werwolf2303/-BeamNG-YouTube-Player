@@ -1,5 +1,3 @@
 [ x ] - Implement templateurl again
-[   ] - Improve ui
-[   ] - Fix playlists
-[   ] - Loop function fix
+
 
